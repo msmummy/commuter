@@ -9,6 +9,11 @@ import contextlib
 import pipes
 import errno
 
+LINUX_MTRACE_GIT_ADDR = "https://github.com/aclements/linux-mtrace.git"
+MTRACE_GIT_ADDR = 'https://github.com/msmummy/mtrace.git'
+LIBELFIN_GIT_ADDR = 'https://github.com/msmummy/libelfin.git'
+Z3_GIT_ADDR = 'https://github.com/Z3Prover/z3'
+
 def main():
     component_names = [name for name, _, _ in COMPONENTS]
 
@@ -117,7 +122,7 @@ def component_z3(args):
     if not os.path.isdir('z3'):
         trace('Clone Z3')
         try:
-            sh(['git', 'clone', 'https://github.com/Z3Prover/z3'])
+            sh(['git', 'clone', Z3_GIT_ADDR])
         except subprocess.CalledProcessError as e:
             if e.returncode == 128:
                 print >>sys.stderr
@@ -179,11 +184,12 @@ def component_libelfin(args):
         trace('libelfin already built or installed')
         return
     except subprocess.CalledProcessError:
+        trace('libelfin or libdwarf++ not build')
         pass
 
     if not os.path.isdir('libelfin'):
         trace('Clone libelfin')
-        sh(['git', 'clone', 'https://github.com/aclements/libelfin.git'])
+        sh(['git', 'clone', LIBELFIN_GIT_ADDR])
 
     with cd('libelfin'):
         trace('Build libelfin')
@@ -191,9 +197,10 @@ def component_libelfin(args):
 COMPONENTS.append(('libelfin', component_libelfin, None))
 
 def component_mtrace(args):
+    print os.environ.copy()
     if not os.path.isdir('mtrace'):
         trace('Clone mtrace')
-        sh(['git', 'clone', 'https://github.com/aclements/mtrace.git'])
+        sh(['git', 'clone', MTRACE_GIT_ADDR])
 
     with cd('mtrace'):
         if os.path.exists('x86_64-softmmu/qemu-system-x86_64'):
@@ -226,7 +233,7 @@ COMPONENTS.append(('mtrace', component_mtrace, env_mtrace))
 def component_linux(args):
     if not os.path.isdir('linux-mtrace'):
         trace('Clone linux')
-        sh(['git', 'clone', 'https://github.com/aclements/linux-mtrace.git'])
+        sh(['git', 'clone', LINUX_MTRACE_GIT_ADDR])
 
     with cd('linux-mtrace'):
         if os.path.exists('arch/x86_64/boot/bzImage'):
