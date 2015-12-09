@@ -9,10 +9,10 @@ import contextlib
 import pipes
 import errno
 
-LINUX_MTRACE_GIT_ADDR = "https://github.com/aclements/linux-mtrace.git"
+LINUX_MTRACE_GIT_ADDR = "https://github.com/msmummy/linux-mtrace.git"
 MTRACE_GIT_ADDR = 'https://github.com/msmummy/mtrace.git'
 LIBELFIN_GIT_ADDR = 'https://github.com/msmummy/libelfin.git'
-Z3_GIT_ADDR = 'https://github.com/Z3Prover/z3'
+Z3_GIT_ADDR = 'https://github.com/msmummy/z3'
 
 def main():
     component_names = [name for name, _, _ in COMPONENTS]
